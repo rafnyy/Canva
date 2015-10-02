@@ -128,8 +128,6 @@ public class FileQueueService extends QueueWithOwnVisibilityTimer implements Que
 
     /**
      * Removes the serialized Message line from the File file that has the same receiptHandle
-     * @param file
-     * @param receiptHandle
      * @return the removed Message
      */
     private Message removeLine(File file, String receiptHandle) {

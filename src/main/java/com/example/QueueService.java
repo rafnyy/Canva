@@ -3,10 +3,11 @@ package com.example;
 import com.amazonaws.services.sqs.model.Message;
 
 public interface QueueService {
+
     /**
      * pushes a message onto a queue.
      *
-     * @param message
+     * @param message The actual message, gets placed in the Message object's body
      */
     void push(String message);
 
@@ -18,7 +19,7 @@ public interface QueueService {
     /**
      * deletes a message from the queue that was received by pull().
      *
-     * @param receiptHandle
+     * @param receiptHandle unique ID receieved during pull()
      */
     void delete(String receiptHandle);
 

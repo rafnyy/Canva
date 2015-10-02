@@ -5,18 +5,15 @@ import com.amazonaws.services.sqs.AmazonSQSClient;
 import com.amazonaws.services.sqs.model.CreateQueueResult;
 import com.amazonaws.services.sqs.model.SetQueueAttributesRequest;
 import com.google.common.collect.ImmutableMap;
-import org.junit.After;
 
 import java.util.Map;
 
 public class SqsQueueTest extends AbstractMultiThreadQueueTest {
-    String queueURL = null;
+    private String queueURL = null;
 
     @Override
     protected QueueService createFreshQueue() {
-        QueueService queue = createQueueForNewThread();
-
-        return queue;
+        return createQueueForNewThread();
     }
 
     @Override

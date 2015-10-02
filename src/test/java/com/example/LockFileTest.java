@@ -3,34 +3,41 @@ package com.example;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 
 import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
+
+
 public class LockFileTest {
-    private String uid;
     private File file;
     private LockFile lockFile;
 
     private static final String lockSuffix = ".lock";
-    private static final int holdLock = 1000;
+    private static final int holdLock = 500;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         UniqueIdentifierGenerator uniqueIdentifierGenerator = new UniqueIdentifierGenerator();
-        uid = uniqueIdentifierGenerator.nextUniqueId();
+        String uid = uniqueIdentifierGenerator.nextUniqueId();
         file = new File(uid);
         lockFile = new LockFile(file);
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         file.delete();
     }
 
     @Test
-    public void testLock() throws Exception {
+    public void testLock() {
         lockFile.lock();
         File lockFileExists = new File(file.getAbsolutePath() + lockSuffix);
         assert(lockFileExists.exists());
@@ -38,7 +45,7 @@ public class LockFileTest {
     }
 
     @Test
-    public void testUnlock() throws Exception {
+    public void testUnlock() {
         lockFile.lock();
         File lockFileExists = new File(file.getAbsolutePath() + lockSuffix);
         lockFile.unlock();
@@ -46,7 +53,7 @@ public class LockFileTest {
     }
 
     @Test
-    public void testFileIsLocked() throws Exception {
+    public void testFileIsLocked() {
         lockFile.lock();
         File lockFileExists = new File(file.getAbsolutePath() + lockSuffix);
         assert(lockFileExists.exists());
@@ -58,12 +65,12 @@ public class LockFileTest {
         lockFile2.unlock();
     }
 
-    void startTimer(LockFile lockFile) {
+    private void startTimer(LockFile lockFile) {
         Timer timer = new Timer();
-        timer.schedule(new LockTimer(lockFile), 500);
+        timer.schedule(new LockTimer(lockFile), holdLock);
     }
 
-    class LockTimer extends TimerTask {
+    private class LockTimer extends TimerTask {
         private final LockFile lockFile;
 
          LockTimer(LockFile lockFile) {
