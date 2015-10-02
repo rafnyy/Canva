@@ -5,6 +5,7 @@ import com.amazonaws.services.sqs.model.Message;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Timer;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class InMemoryQueueService extends QueueWithOwnVisibilityTimer implements QueueService {
@@ -13,7 +14,8 @@ public class InMemoryQueueService extends QueueWithOwnVisibilityTimer implements
 
     private final Utils utils;
 
-    public InMemoryQueueService(Utils utils) {
+    public InMemoryQueueService(Timer timer, Utils utils) {
+        super(timer);
         deleteQueue();
         this.utils = utils;
     }

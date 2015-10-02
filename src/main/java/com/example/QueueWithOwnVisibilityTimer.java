@@ -8,12 +8,17 @@ import java.util.TimerTask;
 abstract class QueueWithOwnVisibilityTimer {
     private final int timeout = 1000;
 
+    private final Timer timer;
+
+    public QueueWithOwnVisibilityTimer(Timer timer) {
+        this.timer = timer;
+    }
+
     protected abstract void reAdd(Message e);
 
     protected abstract Message getMessageFromInvisible(String receiptHandler);
 
     void startTimer(String receiptHandle) {
-        Timer timer = new Timer();
         timer.schedule(new InvisibilityTimer(receiptHandle), timeout);
     }
 

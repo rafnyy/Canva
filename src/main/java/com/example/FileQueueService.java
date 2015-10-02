@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import java.io.*;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.Timer;
 
 public class FileQueueService extends QueueWithOwnVisibilityTimer implements QueueService {
     private static final String invisibleSuffix = ".invisible";
@@ -18,7 +19,8 @@ public class FileQueueService extends QueueWithOwnVisibilityTimer implements Que
     private final Utils utils;
     private final ObjectMapper mapper;
 
-    public FileQueueService(File queue, Utils utils, ObjectMapper mapper) {
+    public FileQueueService(Timer timer, File queue, Utils utils, ObjectMapper mapper) {
+        super(timer);
         this.queue = queue;
         this.invisible = new File(queue.getAbsolutePath() + invisibleSuffix);
         this.utils = utils;

@@ -3,6 +3,7 @@ package com.example;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
+import java.util.Timer;
 
 public class FileQueueTest extends AbstractMultiThreadQueueTest {
     private File file;
@@ -18,6 +19,6 @@ public class FileQueueTest extends AbstractMultiThreadQueueTest {
 
     @Override
     protected QueueService createQueueForNewThread() {
-        return new FileQueueService(file, new Utils(new UniqueIdentifierGenerator()), new ObjectMapper());
+        return new FileQueueService(new Timer(), file, new Utils(new UniqueIdentifierGenerator()), new ObjectMapper());
     }
 }
