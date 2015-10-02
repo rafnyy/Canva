@@ -49,7 +49,7 @@ public class FileQueueService extends QueueWithOwnVisibilityTimer implements Que
 
     @Override
     public Message pull() {
-        String serializeMessage = null;
+        String serializeMessage;
 
         LockFile queueLock = new LockFile(queue);
         queueLock.lock();
@@ -57,12 +57,10 @@ public class FileQueueService extends QueueWithOwnVisibilityTimer implements Que
         // Get the first message in the queue
         try (Scanner queuePull = new Scanner(queue)) {
             serializeMessage = queuePull.nextLine();
-        } catch (NoSuchElementException e) {
-            // queue is empty, return null
+        } catch (NoSuchElementException | FileNotFoundException e) {
+            // queue is empty or doesn't exist, return null
             queueLock.unlock();
             return null;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         }
 
         if (serializeMessage == null) {
@@ -153,10 +151,8 @@ public class FileQueueService extends QueueWithOwnVisibilityTimer implements Que
                     stringBuilder.append(serializedMessage).append("\n");
                 }
             }
-        } catch (NoSuchElementException e) {
-            // reached the end of file, continue
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        } catch (NoSuchElementException | FileNotFoundException e) {
+            // reached the end of file or no queue exists, continue
         }
 
         try (FileWriter writer = new FileWriter(file)) {
