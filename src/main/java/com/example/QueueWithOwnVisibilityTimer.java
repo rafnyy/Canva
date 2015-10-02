@@ -2,6 +2,8 @@ package com.example;
 
 import com.amazonaws.services.sqs.model.Message;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -13,15 +15,15 @@ abstract class QueueWithOwnVisibilityTimer {
     protected abstract Message getMessageFromInvisible(String receiptHandler);
 
     void startTimer(String receiptHandle) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(new InvisibilityTimer(receiptHandle));
+        Timer timer = new Timer();
+        timer.schedule(new InvisibilityTimer(receiptHandle), timeout);
     }
 
     /**
-     * This class will sleep until the timeout is up for a Message, if if the timeout is hit and the Message is still
-     * invisible, it will reinsert it at the front of the queue.
+     * TimerTask that will check if the Message is still
+     * invisible, and if so,  will reinsert it at the front of the queue.
      */
-    class InvisibilityTimer implements Runnable {
+    class InvisibilityTimer extends TimerTask {
         private final String receiptHandler;
 
         InvisibilityTimer(String receiptHandler) {
@@ -29,14 +31,9 @@ abstract class QueueWithOwnVisibilityTimer {
         }
 
         public void run() {
-            try {
-                Thread.sleep(timeout);
-                Message message = getMessageFromInvisible(receiptHandler);
-                if (message != null) {
-                    reAdd(message);
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            Message message = getMessageFromInvisible(receiptHandler);
+            if (message != null) {
+                reAdd(message);
             }
         }
     }

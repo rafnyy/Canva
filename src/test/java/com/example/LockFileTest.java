@@ -6,6 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -60,24 +62,19 @@ public class LockFileTest {
     }
 
     void startTimer(LockFile lockFile) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(new LockTimer(lockFile));
+        Timer timer = new Timer();
+        timer.schedule(new LockTimer(lockFile), 500);
     }
 
-    class LockTimer implements Runnable {
+    class LockTimer extends TimerTask {
         private final LockFile lockFile;
 
-        LockTimer(LockFile lockFile) {
+         LockTimer(LockFile lockFile) {
             this.lockFile = lockFile;
         }
 
         public void run() {
-            try {
-                Thread.sleep(holdLock);
-                lockFile.unlock();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            lockFile.unlock();
         }
     }
 }
