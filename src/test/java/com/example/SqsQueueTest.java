@@ -9,15 +9,13 @@ import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 
 public class SqsQueueTest extends AbstractMultiThreadQueueTest {
-    private String queueURL = null;
-
     @Override
     protected QueueService createFreshQueue() {
-        return createQueueForNewThread();
+        return createQueueForNewThread(null);
     }
 
     @Override
-    protected QueueService createQueueForNewThread() {
+    protected QueueService createQueueForNewThread(String queueURL) {
         BasicAWSCredentials credentials = new BasicAWSCredentials("AKIAJMF6TOUUWKPUXVXA", "esmnylDZdPGenTDiLRgoHbYRetfiefHOFF0p6Ubt");
         AmazonSQSClient client = new AmazonSQSClient(credentials);
 
@@ -31,6 +29,6 @@ public class SqsQueueTest extends AbstractMultiThreadQueueTest {
             client.setQueueAttributes(setQueueAttributesRequest);
         }
 
-        return new SqsQueueService(client, queueURL);
+        return new SqsQueueService(queueURL, client);
     }
 }

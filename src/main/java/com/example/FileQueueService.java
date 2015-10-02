@@ -19,9 +19,9 @@ public class FileQueueService extends QueueWithOwnVisibilityTimer implements Que
     private final Utils utils;
     private final ObjectMapper mapper;
 
-    public FileQueueService(Timer timer, File queue, Utils utils, ObjectMapper mapper) {
+    public FileQueueService(String uid, Utils utils, Timer timer, ObjectMapper mapper) {
         super(timer);
-        this.queue = queue;
+        this.queue = new File(uid);
         this.invisible = new File(queue.getAbsolutePath() + invisibleSuffix);
         this.utils = utils;
         this.mapper = mapper;
@@ -65,7 +65,7 @@ public class FileQueueService extends QueueWithOwnVisibilityTimer implements Que
             e.printStackTrace();
         }
 
-        if(serializeMessage == null) {
+        if (serializeMessage == null) {
             queueLock.unlock();
             return null;
         }
@@ -94,6 +94,11 @@ public class FileQueueService extends QueueWithOwnVisibilityTimer implements Que
     @Override
     public void delete(String receiptHandle) {
         removeLine(invisible, receiptHandle);
+    }
+
+    @Override
+    public String getUID() {
+        return queue.getName();
     }
 
     @Override
@@ -130,6 +135,7 @@ public class FileQueueService extends QueueWithOwnVisibilityTimer implements Que
 
     /**
      * Removes the serialized Message line from the File file that has the same receiptHandle
+     *
      * @return the removed Message
      */
     private Message removeLine(File file, String receiptHandle) {

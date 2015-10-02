@@ -16,13 +16,13 @@ public abstract class AbstractMultiThreadQueueTest extends AbstractQueueTest {
      *
      * @return a new QueueService pointing at an existing queue
      */
-    protected abstract QueueService createQueueForNewThread();
+    protected abstract QueueService createQueueForNewThread(String uid);
 
     @Test
     public void testPushFromTwoProducers() {
         String body = "testPushFromTwoProducers";
         queue.push(body);
-        QueueService queue2 = createQueueForNewThread();
+        QueueService queue2 = createQueueForNewThread(queue.getUID());
         queue2.push(body);
         Message message1 = queue.pull();
         queue.delete(message1.getReceiptHandle());
@@ -41,7 +41,7 @@ public abstract class AbstractMultiThreadQueueTest extends AbstractQueueTest {
         queue.push(body);
         Message message1 = queue.pull();
         queue.delete(message1.getReceiptHandle());
-        QueueService queue2 = createQueueForNewThread();
+        QueueService queue2 = createQueueForNewThread(queue.getUID());
         Message message2 = queue2.pull();
         queue2.delete(message2.getReceiptHandle());
         assertEquals("Verifying that the first element we pull from the queue is the first element we pushed",
@@ -56,7 +56,7 @@ public abstract class AbstractMultiThreadQueueTest extends AbstractQueueTest {
         queue.push(body);
         Message message = queue.pull();
         Thread.sleep(queue.getTimeout() * 2);
-        QueueService queue2 = createQueueForNewThread();
+        QueueService queue2 = createQueueForNewThread(queue.getUID());
         assertEquals("Verifying that if we do not delete an element before the timeout, it reappears at the head of the queue",
                 message.getBody(), queue2.pull().getBody());
         queue2.delete(message.getReceiptHandle());

@@ -5,6 +5,6 @@ import java.util.Timer;
 public class InMemoryQueueTest extends AbstractQueueTest {
     @Override
     protected QueueService createFreshQueue() {
-        return new InMemoryQueueService(new Timer(), new Utils(new UniqueIdentifierGenerator()));
+        return new InMemoryQueueService(new Utils(new UniqueIdentifierGenerator()), new Timer());
     }
 }

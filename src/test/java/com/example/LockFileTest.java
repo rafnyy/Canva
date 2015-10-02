@@ -33,7 +33,7 @@ public class LockFileTest {
     public void testLock() {
         lockFile.lock();
         File lockFileExists = new File(file.getAbsolutePath() + lockSuffix);
-        assert(lockFileExists.exists());
+        assert (lockFileExists.exists());
         lockFile.unlock();
     }
 
@@ -42,19 +42,19 @@ public class LockFileTest {
         lockFile.lock();
         File lockFileExists = new File(file.getAbsolutePath() + lockSuffix);
         lockFile.unlock();
-        assert(!lockFileExists.exists());
+        assert (!lockFileExists.exists());
     }
 
     @Test
     public void testFileIsLocked() {
         lockFile.lock();
         File lockFileExists = new File(file.getAbsolutePath() + lockSuffix);
-        assert(lockFileExists.exists());
+        assert (lockFileExists.exists());
         startTimer(lockFile);
         File file2 = new File(file.getAbsolutePath());
         LockFile lockFile2 = new LockFile(file2);
         lockFile2.lock();
-        assert(lockFileExists.exists());
+        assert (lockFileExists.exists());
         lockFile2.unlock();
     }
 
@@ -66,7 +66,7 @@ public class LockFileTest {
     private class LockTimer extends TimerTask {
         private final LockFile lockFile;
 
-         LockTimer(LockFile lockFile) {
+        LockTimer(LockFile lockFile) {
             this.lockFile = lockFile;
         }
 

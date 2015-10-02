@@ -11,7 +11,7 @@ public class SqsQueueService implements QueueService {
     private final AmazonSQSClient queue;
     private final String url;
 
-    public SqsQueueService(AmazonSQSClient sqsClient, String url) {
+    public SqsQueueService(String url, AmazonSQSClient sqsClient) {
         this.queue = sqsClient;
         this.url = url;
     }
@@ -35,6 +35,11 @@ public class SqsQueueService implements QueueService {
     @Override
     public void delete(String receiptHandle) {
         queue.deleteMessage(new DeleteMessageRequest(url, receiptHandle));
+    }
+
+    @Override
+    public String getUID() {
+        return url;
     }
 
     @Override

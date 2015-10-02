@@ -14,7 +14,7 @@ public class InMemoryQueueService extends QueueWithOwnVisibilityTimer implements
 
     private final Utils utils;
 
-    public InMemoryQueueService(Timer timer, Utils utils) {
+    public InMemoryQueueService(Utils utils, Timer timer) {
         super(timer);
         deleteQueue();
         this.utils = utils;
@@ -46,6 +46,11 @@ public class InMemoryQueueService extends QueueWithOwnVisibilityTimer implements
     @Override
     public void delete(String receiptHandle) {
         invisible.remove(receiptHandle);
+    }
+
+    @Override
+    public String getUID() {
+        return null;
     }
 
     @Override

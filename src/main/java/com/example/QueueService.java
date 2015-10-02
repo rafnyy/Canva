@@ -23,10 +23,14 @@ public interface QueueService {
      */
     void delete(String receiptHandle);
 
+    String getUID();
+
     /**
      * Completely empties the queue, useful for testing.
      */
     void deleteQueue();
 
     int getTimeout();
+
+
 }
