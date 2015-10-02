@@ -1,6 +1,5 @@
 package com.example;
 
-import com.amazonaws.services.sqs.model.Message;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,8 +7,6 @@ import org.junit.Test;
 import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class LockFileTest {
     private String uid;
