@@ -24,7 +24,7 @@ public class SqsQueueTest extends AbstractMultiThreadQueueTest {
             String uid = uniqueIdentifierGenerator.nextUniqueId();
             CreateQueueResult createQueueResult = client.createQueue(uid);
             queueURL = createQueueResult.getQueueUrl();
-            Map<String, String> attributes = ImmutableMap.<String, String>builder().put("VisibilityTimeout", "5").build();
+            Map<String, String> attributes = ImmutableMap.<String, String>builder().put(SqsQueueService.VISIBILITY_KEY, "5").build();
             SetQueueAttributesRequest setQueueAttributesRequest = new SetQueueAttributesRequest(queueURL, attributes);
             client.setQueueAttributes(setQueueAttributesRequest);
         }

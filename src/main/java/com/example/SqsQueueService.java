@@ -1,15 +1,18 @@
 package com.example;
 
 import com.amazonaws.services.sqs.AmazonSQSClient;
-import com.amazonaws.services.sqs.model.DeleteMessageRequest;
-import com.amazonaws.services.sqs.model.Message;
-import com.amazonaws.services.sqs.model.SendMessageRequest;
+import com.amazonaws.services.sqs.model.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class SqsQueueService implements QueueService {
+    public final static String VISIBILITY_KEY = "VisibilityTimeout";
+
     private final AmazonSQSClient queue;
     private final String url;
+
+    private static final int milliseconds = 1000;
 
     public SqsQueueService(String url, AmazonSQSClient sqsClient) {
         this.queue = sqsClient;
@@ -49,6 +52,7 @@ public class SqsQueueService implements QueueService {
 
     @Override
     public int getTimeout() {
-        return 5000;
+        GetQueueAttributesResult queueAttributes = queue.getQueueAttributes(new GetQueueAttributesRequest(url, Arrays.asList(VISIBILITY_KEY)));
+        return Integer.parseInt(queueAttributes.getAttributes().get(VISIBILITY_KEY)) * milliseconds;
     }
 }

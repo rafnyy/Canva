@@ -31,6 +31,4 @@ public interface QueueService {
     void deleteQueue();
 
     int getTimeout();
-
-
 }
