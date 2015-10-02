@@ -142,7 +142,7 @@ public class FileQueueService extends QueueWithOwnVisibilityTimer implements Que
         StringBuilder stringBuilder = new StringBuilder("");
         Message message = null;
 
-        try (Scanner reader = new Scanner(queue)) {
+        try (Scanner reader = new Scanner(file)) {
             String serializedMessage;
 
             while ((serializedMessage = reader.nextLine()) != null) {

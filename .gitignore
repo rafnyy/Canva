@@ -6,6 +6,12 @@ pom.xml.next
 release.properties
 
 # =========================
+# Canva Files
+# =========================
+*.lock
+*.invisible
+
+# =========================
 # IntelliJ Files
 # =========================
 .idea/

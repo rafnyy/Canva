@@ -10,7 +10,7 @@ abstract class QueueWithOwnVisibilityTimer {
 
     private final Timer timer;
 
-    public QueueWithOwnVisibilityTimer(Timer timer) {
+    QueueWithOwnVisibilityTimer(Timer timer) {
         this.timer = timer;
     }
 
