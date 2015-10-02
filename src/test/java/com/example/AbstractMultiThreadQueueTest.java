@@ -1,6 +1,7 @@
 package com.example;
 
 import com.amazonaws.services.sqs.model.Message;
+import org.junit.After;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -12,7 +13,8 @@ public abstract class AbstractMultiThreadQueueTest extends AbstractQueueTest {
     /**
      * This creates a new QueueService object that references an existing queue.
      * This queue has no guarantees on what is in it and it is expected that other threads may be modifying it.
-     * @return
+     *
+     * @return a new QueueService pointing at an existing queue
      */
     protected abstract QueueService createQueueForNewThread();
 
@@ -60,5 +62,10 @@ public abstract class AbstractMultiThreadQueueTest extends AbstractQueueTest {
         queue2.delete(message.getReceiptHandle());
         assertEquals("Verifying that a pull from an empty queue returns null",
                 null, queue2.pull());
+    }
+
+    @After
+    public void cleanup() {
+        queue.deleteQueue();
     }
 }

@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
  * Tests that need to run on all implementations of QueueService
  */
 public abstract class AbstractQueueTest {
-    protected QueueService queue;
+    QueueService queue;
 
     /**
      * @return an empty implementation of a QueueService
@@ -43,7 +43,7 @@ public abstract class AbstractQueueTest {
     }
 
     @Test
-    public void testDelete() throws InterruptedException {
+    public void testDelete() {
         String body = "testDelete-one";
         queue.push(body);
         Message message = queue.pull();
@@ -86,11 +86,12 @@ public abstract class AbstractQueueTest {
     public void testFIFO() throws InterruptedException {
         String body1 = "testFIFO-one";
         queue.push(body1);
-        Thread.sleep(2000);
+        Thread.sleep(12 * queue.getTimeout());
         String body2 = "testFIFO-two";
         queue.push(body2);
         Message message1 = queue.pull();
         queue.delete(message1.getReceiptHandle());
+        Thread.sleep(12 * queue.getTimeout());
         Message message2 = queue.pull();
         queue.delete(message2.getReceiptHandle());
         assertEquals("Verifying that the first element we pull from the queue is the first element we pushed",
